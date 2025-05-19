@@ -1,4 +1,3 @@
-// components/SponsorSection.js
 "use client";
 
 import React, { useState } from 'react';
@@ -12,6 +11,8 @@ import {
   Typography,
   Container,
   Box,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 function SponsorSection() {
@@ -20,6 +21,9 @@ function SponsorSection() {
   const [telefone, setTelefone] = useState('');
   const [tipoInteresse, setTipoInteresse] = useState('patrocinador');
   const [sugestao, setSugestao] = useState('');
+
+  // Estado para mostrar o Snackbar
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,7 +43,7 @@ function SponsorSection() {
     const result = await response.json();
 
     if (result.status === 'success') {
-      alert('Formulário enviado com sucesso!');
+      setOpenSnackbar(true); // abre o Snackbar
       setNome('');
       setEmail('');
       setTelefone('');
@@ -48,6 +52,10 @@ function SponsorSection() {
     } else {
       alert('Erro ao enviar o formulário. Tente novamente.');
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -120,6 +128,18 @@ function SponsorSection() {
             </Button>
           </Box>
         </Box>
+
+        {/* Snackbar para feedback */}
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            Formulário Enviado!
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );
